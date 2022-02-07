@@ -20,6 +20,7 @@ body {
 
 .tweet--neu {
     padding: 10px;
+    margin-bottom: 30px;
 }
 
 .avatar {
@@ -75,4 +76,8 @@ body {
 
 .flex {
     display: flex;
+}
+
+.envelope {
+    padding: 10px;
 }

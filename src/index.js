@@ -3,29 +3,32 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import './index.css';
-import { Avatar, Button, Card, CardContent } from 'ui-neumorphism';
+import { Avatar, Button, Card, CardContent, CardHeader } from 'ui-neumorphism';
 import 'ui-neumorphism/dist/index.css'
 
 function Tweet({ tweet }) {
     return (
-        <Card className="tweet--neu">
-            <CardContent>
-                <div className="flex">
-                    <AuthorAvatar hash={tweet.gravatar} />
-                    <div className="content">
-                        <Author author={tweet.author} />
-                        <Time time={tweet.timestamp} />
-                        <Message text={tweet.message} />
+        <>
+            <Card className="tweet--neu">
+                <CardContent>
+                    <div className="flex">
+                        <AuthorAvatar hash={tweet.gravatar} />
+                        <div className="content">
+                            <Author author={tweet.author} />
+                            <Time time={tweet.timestamp} />
+                            <Message text={tweet.message} />
+                        </div>
                     </div>
-                </div>
-                <div className="buttons">
-                    <ReplyButton />
-                    <RetweetButton count={tweet.retweets} />
-                    <LikeButton count={tweet.likes} />
-                    <MoreOptionsButton />
-                </div>
-            </CardContent>
-        </Card>
+                    <div className="buttons">
+                        <ReplyButton />
+                        <RetweetButton count={tweet.retweets} />
+                        <LikeButton count={tweet.likes} />
+                        <MoreOptionsButton />
+                    </div>
+                </CardContent>
+            </Card>
+            <Envelope from={person1} to={person2} />
+        </>
     )
 }
 
@@ -50,7 +53,7 @@ Tweet.propTypes = PropTypes.shape({
 function AuthorAvatar({ hash }) {
     const url = `https://www.gravatar.com/avatar/${hash}`
     return (
-        <Avatar src={url} alt="avatar" size="large" className="avatar" style={{'marginRight': '10px'}}/>
+        <Avatar src={url} alt="avatar" size="large" className="avatar" style={{ 'marginRight': '10px' }} />
     )
 }
 
@@ -135,5 +138,67 @@ const MoreOptionsButton = () => (
 LikeButton.propTypes = {
     count: PropTypes.number
 }
+
+const person1 = {
+    firstName: 'Tim',
+    lastName: 'Copland',
+    addressLine1: '123 Fake St',
+    city: 'Boston',
+    state: 'MA',
+    postcode: '02118'
+}
+
+const person2 = {
+    firstName: 'Nina',
+    lastName: 'Wan',
+    addressLine1: '21 David St',
+    city: 'Richmond',
+    state: 'VIC',
+    postcode: '3121'
+}
+
+function AddressLabel({ person }) {
+    const { firstName, lastName, addressLine1, city, state, postcode } = person;
+    return (
+        <div>
+            {firstName} {lastName}<br />
+            {addressLine1}<br />
+            {city} {state} {postcode}
+        </div>
+    );
+}
+
+const personPropType = PropTypes.shape({
+    firstName: PropTypes.string.isRequired,
+    lastName: PropTypes.string.isRequired,
+    addressLine1: PropTypes.string,
+    city: PropTypes.string,
+    state: PropTypes.string,
+    postcode: PropTypes.string
+})
+
+AddressLabel.propTypes = {
+    person: personPropType
+}
+
+function Envelope({from, to}) {
+    return (
+        <Card className="envelope">
+            <CardContent>
+                <AddressLabel person={to} />
+            </CardContent>
+            <CardHeader style={{textAlign:'center'}}>
+                <AddressLabel person={from} />
+            </CardHeader>
+        </Card>
+    )
+}
+
+Envelope.propTypes = {
+    from: personPropType,
+    to: personPropType
+}
+
+
 
 ReactDOM.render(<Tweet tweet={testTweet} />, document.querySelector('#root'));
